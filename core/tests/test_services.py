@@ -8,8 +8,11 @@ from core.services.distribution import distribute_pending_tasks
 class TestScalingLogic:
     """Test suite for executor scaling logic."""
 
-    def test_scale_up_when_pending_tasks_exceed_threshold(self, db, multiple_tasks):
+    def test_scale_up_when_pending_tasks_exceed_threshold(self, db):
         """Test that having > 10 pending tasks increases executor count."""
+        # Ensure no pre-existing tasks
+        Task.objects.all().delete()
+
         # Create 2 initial executors
         Executor.objects.create(name="Executor-1", max_tasks=5)
         Executor.objects.create(name="Executor-2", max_tasks=5)

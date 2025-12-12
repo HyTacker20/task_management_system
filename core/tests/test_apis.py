@@ -6,10 +6,16 @@ from django.urls import reverse
 from core.models import Executor, Task
 
 
+from django.contrib.auth.models import User
+
+
 @pytest.fixture
-def api_client():
-    """Create and return an API client for testing."""
-    return APIClient()
+def api_client(db):
+    """Create an authenticated API client for testing."""
+    client = APIClient()
+    user = User.objects.create_user(username="tester", password="pass1234")
+    client.force_authenticate(user=user)
+    return client
 
 
 @pytest.mark.integration
@@ -60,7 +66,7 @@ class TestTasksAPI:
         response = api_client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == len(multiple_tasks)
+        assert len(response.data.get("results", [])) == len(multiple_tasks)
 
     def test_retrieve_task(self, db, api_client, sample_task):
         """Verify retrieving a single task works."""
@@ -160,7 +166,7 @@ class TestExecutorsAPI:
         response = api_client.get(url)
 
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == len(multiple_executors)
+        assert len(response.data.get("results", [])) == len(multiple_executors)
 
     def test_retrieve_executor(self, db, api_client, sample_executor):
         """Verify retrieving a single executor works."""
