@@ -9,14 +9,11 @@ from core.models import Executor, Task
 def sample_executor(db):
     """
     Create and return a sample Executor instance for testing.
-    
+
     Returns:
         Executor: An executor with name 'Test-Executor' and max_tasks=5
     """
-    executor = Executor.objects.create(
-        name="Test-Executor",
-        max_tasks=5
-    )
+    executor = Executor.objects.create(name="Test-Executor", max_tasks=5)
     return executor
 
 
@@ -24,14 +21,14 @@ def sample_executor(db):
 def sample_task(db):
     """
     Create and return a sample Task instance for testing.
-    
+
     Returns:
         Task: A pending task with medium priority
     """
     task = Task.objects.create(
         description="Sample test task",
         priority=Task.Priority.MEDIUM,
-        status=Task.Status.PENDING
+        status=Task.Status.PENDING,
     )
     return task
 
@@ -40,10 +37,10 @@ def sample_task(db):
 def sample_task_with_executor(db, sample_executor):
     """
     Create and return a Task instance assigned to an executor.
-    
+
     Args:
         sample_executor: The executor fixture to assign the task to
-        
+
     Returns:
         Task: An in-progress task assigned to the sample executor
     """
@@ -51,7 +48,7 @@ def sample_task_with_executor(db, sample_executor):
         description="Task assigned to executor",
         priority=Task.Priority.HIGH,
         status=Task.Status.IN_PROGRESS,
-        assignee=sample_executor
+        assignee=sample_executor,
     )
     return task
 
@@ -60,7 +57,7 @@ def sample_task_with_executor(db, sample_executor):
 def multiple_executors(db):
     """
     Create and return multiple Executor instances for testing.
-    
+
     Returns:
         list[Executor]: A list of 3 executors with varying capacities
     """
@@ -76,7 +73,7 @@ def multiple_executors(db):
 def multiple_tasks(db):
     """
     Create and return multiple Task instances with different priorities.
-    
+
     Returns:
         list[Task]: A list of 5 tasks with varying priorities and statuses
     """
@@ -84,28 +81,28 @@ def multiple_tasks(db):
         Task.objects.create(
             description="High priority task 1",
             priority=Task.Priority.HIGHEST,
-            status=Task.Status.PENDING
+            status=Task.Status.PENDING,
         ),
         Task.objects.create(
             description="High priority task 2",
             priority=Task.Priority.HIGH,
-            status=Task.Status.PENDING
+            status=Task.Status.PENDING,
         ),
         Task.objects.create(
             description="Medium priority task",
             priority=Task.Priority.MEDIUM,
-            status=Task.Status.IN_PROGRESS
+            status=Task.Status.IN_PROGRESS,
         ),
         Task.objects.create(
             description="Low priority task",
             priority=Task.Priority.LOW,
-            status=Task.Status.PENDING
+            status=Task.Status.PENDING,
         ),
         Task.objects.create(
             description="Completed task",
             priority=Task.Priority.MEDIUM,
             status=Task.Status.COMPLETED,
-            completed_at=timezone.now()
+            completed_at=timezone.now(),
         ),
     ]
     return tasks
@@ -115,10 +112,10 @@ def multiple_tasks(db):
 def completed_task(db, sample_executor):
     """
     Create and return a completed Task instance.
-    
+
     Args:
         sample_executor: The executor fixture
-        
+
     Returns:
         Task: A completed task with completed_at timestamp
     """
@@ -127,6 +124,6 @@ def completed_task(db, sample_executor):
         priority=Task.Priority.MEDIUM,
         status=Task.Status.COMPLETED,
         assignee=sample_executor,
-        completed_at=timezone.now()
+        completed_at=timezone.now(),
     )
     return task
