@@ -174,3 +174,13 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TIMEZONE = TIME_ZONE
+
+# Celery Beat Schedule
+# https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html
+
+CELERY_BEAT_SCHEDULE = {
+    "run-system-tick-every-10-seconds": {
+        "task": "core.tasks.run_system_tick",
+        "schedule": 10.0,  # Run every 10 seconds
+    },
+}
