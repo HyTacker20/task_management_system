@@ -64,7 +64,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: task_management_celery
-    command: celery -A task_management_system worker -l info
+    command: celery -A config worker -l info
     volumes:
       - .:/app
     environment:
