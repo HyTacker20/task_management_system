@@ -1,7 +1,8 @@
 import pytest
+
 from core.models import Executor, Task
-from core.services.scaling import adjust_executor_count
 from core.services.distribution import distribute_pending_tasks
+from core.services.scaling import adjust_executor_count
 
 
 @pytest.mark.unit

@@ -1,16 +1,12 @@
-from rest_framework import viewsets, status
+from drf_spectacular.utils import extend_schema
+from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from drf_spectacular.utils import extend_schema
 
 from core.models import Executor, Task
-from core.serializers import (
-    ExecutorSerializer,
-    ExecutorUpdateSerializer,
-    TaskSerializer,
-    TaskUpdateSerializer,
-)
-from core.selectors import get_global_stats, get_executor_stats
+from core.selectors import get_executor_stats, get_global_stats
+from core.serializers import (ExecutorSerializer, ExecutorUpdateSerializer,
+                              TaskSerializer, TaskUpdateSerializer)
 
 
 class TaskViewSet(viewsets.ModelViewSet):

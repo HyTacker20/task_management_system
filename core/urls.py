@@ -1,7 +1,7 @@
-from django.urls import path, include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from core.apis.views import TaskViewSet, ExecutorViewSet, StatsViewSet
+from core.apis.views import ExecutorViewSet, StatsViewSet, TaskViewSet
 
 # Create a router and register viewsets
 router = DefaultRouter()

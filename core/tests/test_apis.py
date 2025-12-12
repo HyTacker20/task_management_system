@@ -1,12 +1,10 @@
 import pytest
-from rest_framework.test import APIClient
-from rest_framework import status
+from django.contrib.auth.models import User
 from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APIClient
 
 from core.models import Executor, Task
-
-
-from django.contrib.auth.models import User
 
 
 @pytest.fixture
