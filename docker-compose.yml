@@ -84,11 +84,36 @@ services:
     networks:
       - task_network
 
+  celery_beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        ENV: dev
+    container_name: task_management_celery_beat
+    command: python -m celery -A config beat -l info
+    volumes:
+      - .:/app
+      - celery_beat_venv:/opt/venv
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=dev-secret-key-change-in-production
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/task_management
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - task_network
+
 volumes:
   postgres_data:
   redis_data:
   web_venv:
   celery_venv:
+  celery_beat_venv:
 
 networks:
   task_network:
