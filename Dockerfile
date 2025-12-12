@@ -1,20 +1,21 @@
 # Build stage
-FROM python:3.12-slim as builder
+FROM python:3.12-slim AS builder
+
+# Build-time environment (dev or prod)
+ARG ENV=dev
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
-# Install system dependencies and uv
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     libpq-dev \
-    curl \
-    && curl -LsSf https://astral.sh/uv/install.sh | sh \
     && rm -rf /var/lib/apt/lists/*
 
-# Add uv to PATH
-ENV PATH="/root/.cargo/bin:$PATH"
+# Install uv package manager
+RUN pip install --no-cache-dir uv
 
 # Create and set work directory
 WORKDIR /app
@@ -22,6 +23,10 @@ WORKDIR /app
 # Install Python dependencies using uv
 COPY requirements.txt .
 RUN uv pip install --system -r requirements.txt
+
+# Optionally install development/test dependencies when ENV=dev
+COPY requirements-dev.txt ./requirements-dev.txt
+RUN if [ "$ENV" = "dev" ]; then uv pip install --system -r requirements-dev.txt; fi
 
 # Runtime stage
 FROM python:3.12-slim
@@ -40,9 +45,6 @@ RUN useradd -m -u 1000 django && \
 # Copy Python dependencies from builder
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
-
-# Copy Python dependencies from builder
-COPY --from=builder /root/.local /root/.local
 
 # Set work directory
 WORKDIR /app
